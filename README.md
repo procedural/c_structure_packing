@@ -11,3 +11,20 @@
 
 * https://docs.microsoft.com/en-us/windows/win32/winprog/using-the-windows-headers?redirectedfrom=MSDN#controlling-structure-packing
 > Projects should be compiled to use the default structure packing, which is currently 8 bytes because the largest integral type is 8 bytes. Doing so ensures that all structure types within the header files are compiled into the application with the same alignment the Windows API expects. It also ensures that structures with 8-byte values are properly aligned and will not cause alignment faults on processors that enforce data alignment.
+
+---
+
+This should be a compile-time error, this must not compile: https://godbolt.org/z/6WMKb18Pv
+```c
+struct x {
+  unsigned _0;
+  unsigned _1;
+  void *   _2;
+  unsigned _3;
+  unsigned _4;
+  unsigned _5;
+  //unsigned _6;
+};
+
+static_assert(sizeof(struct x) == 32, "");
+```
